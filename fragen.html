@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Zufällige Gesprächsfragen für das OOPS Member-Speeddating.">
+  <meta name="theme-color" content="#120b09">
+  <title>[OOPS] Speeddating-Frage</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="fragen.css">
+  <script src="fragen.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="hero question-page" id="question-page" aria-labelledby="page-title">
+      <div class="eyebrow">OOPS Kennenlern-Event · Member-Speeddating</div>
+      <h1 id="page-title">Eure Frage</h1>
+
+      <div class="before-question">
+        <p class="intro">
+          Wählt eine Kategorie. Ihr bekommt eine gemeinsame Frage für eure Gesprächsrunde.
+        </p>
+
+        <div class="category-panel" aria-labelledby="category-title">
+          <h2 id="category-title">Kategorie wählen</h2>
+          <div class="category-buttons" id="category-buttons"></div>
+        </div>
+
+        <div class="event-info compact-info">
+          <h2>So funktioniert es</h2>
+          <p>
+            Nehmt euch einige Minuten Zeit und lasst alle zu Wort kommen.
+            Es geht nicht um die beste Antwort, sondern darum, etwas voneinander zu erfahren.
+          </p>
+          <p class="note">
+            Eingeweihte Spielerinnen und Spieler können in den Räumen bleiben,
+            das Gespräch eröffnen und darauf achten, dass niemand übergangen wird.
+          </p>
+          <p>
+            Die Fragen werden aus <code>fragen.md</code> geladen und dort als Markdown-Listen gepflegt.
+          </p>
+        </div>
+
+        <div class="actions back-link">
+          <a class="button secondary" href="index.html">Zurück zum Event</a>
+          <a class="button secondary" href="https://discord.gg/EwYqEqCdZz" target="_blank" rel="noopener noreferrer">Zum OOPS-Discord</a>
+        </div>
+      </div>
+
+      <section class="question-result" aria-live="polite" aria-atomic="true" hidden>
+        <article class="question-card">
+          <p class="question-label">Gesprächsrunde</p>
+          <p class="question-category" id="question-category"></p>
+          <p class="question-text" id="question-text"></p>
+        </article>
+
+        <div class="question-guidance">
+          <p>
+            Hört einander zu, fragt gern nach und sucht nach Gemeinsamkeiten.
+            Jede Person darf eine Antwort auch kurz halten oder passen.
+          </p>
+        </div>
+
+        <section class="timer-panel" aria-labelledby="timer-title">
+          <h2 id="timer-title">Gesprächszeit</h2>
+
+          <div class="timer-setup" id="timer-setup">
+            <p>Timer starten:</p>
+            <div class="timer-options" aria-label="Gesprächsdauer wählen">
+              <button class="button timer-choice" type="button" data-minutes="2">2 Minuten</button>
+              <button class="button timer-choice" type="button" data-minutes="3">3 Minuten</button>
+              <button class="button timer-choice" type="button" data-minutes="5">5 Minuten</button>
+            </div>
+          </div>
+
+          <div class="timer-running" id="timer-running" hidden>
+            <div class="timer-display" id="timer-display" aria-live="polite">03:00</div>
+            <div class="timer-track" role="progressbar" aria-label="Verbleibende Gesprächszeit"
+                 aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+              <div class="timer-progress" id="timer-progress"></div>
+            </div>
+            <button class="button secondary timer-stop" id="timer-stop" type="button">Timer stoppen</button>
+          </div>
+        </section>
+
+        <p id="question-status" class="status" role="status"></p>
+
+        <div class="actions question-actions">
+          <button class="button primary" id="draw-again" type="button">Andere Frage dieser Kategorie</button>
+          <button class="button secondary" id="choose-category" type="button">Andere Kategorie</button>
+          <button class="button secondary" id="copy-link" type="button">Link zur Frage kopieren</button>
+        </div>
+      </section>
+
+      <noscript>
+        <div class="event-info">
+          <p>Für den Zufallsgenerator muss JavaScript aktiviert sein.</p>
+        </div>
+      </noscript>
+    </section>
+  </main>
+
+  <footer><span>[OOPS] · We Can't Fly Here</span></footer>
+</body>
+</html>
