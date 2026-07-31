@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Zufällige WvW-Gruppenaufgaben für das OOPS Kennenlern-Event.">
+  <meta name="theme-color" content="#120b09">
+  <title>[OOPS] Einsatzgruppen-Aufgabe</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="aufgaben.css">
+  <script src="aufgaben.js" defer></script>
+</head>
+<body>
+  <main>
+    <section class="hero task-page" id="task-page" aria-labelledby="task-title">
+      <div class="eyebrow">OOPS Kennenlern-Event · WvW</div>
+      <h1 id="task-title">Eure Mission</h1>
+
+      <div class="before-draw">
+        <p class="intro">Ihr seid eine kleine Einsatzgruppe ohne Kommandeur. Holt euch eine zufällige Hauptaufgabe und eine spielerische Zusatzaufgabe.</p>
+
+        <div class="task-rules" aria-label="Rahmenbedingungen">
+          <span>10–20 Minuten</span>
+          <span>Ohne Kommandeur</span>
+          <span>Zusammenarbeit zählt</span>
+        </div>
+      </div>
+
+      <section class="mission-panel" aria-live="polite" aria-atomic="true">
+        <div class="mission-card main-mission-card">
+          <p class="mission-label">Hauptaufgabe</p>
+          <p class="mission-category" id="category">Noch nicht gezogen</p>
+          <p class="mission-text" id="main-task">Klickt auf „Aufgabe ziehen“, sobald eure Gruppe bereit ist.</p>
+        </div>
+
+        <div class="mission-card bonus-card">
+          <p class="mission-label">Zusatzaufgabe</p>
+          <p class="mission-text" id="bonus-task">Sie wird gemeinsam mit der Hauptaufgabe gezogen.</p>
+        </div>
+
+        <div class="mission-guidance" hidden>
+          <p>Beide Aufgaben gehören zusammen. Passt Ziel, Karte oder Feste gemeinsam an die aktuelle Spielsituation an. Ein guter Plan, klare Rollen und Zusammenarbeit sind wichtiger als ein perfekter Erfolg.</p>
+        </div>
+
+        <p class="mission-time" hidden>Ihr habt 15 Minuten Zeit!</p>
+        <p id="task-status" class="status" role="status"></p>
+      </section>
+
+      <div class="actions task-actions">
+        <button class="button primary" id="draw-task" type="button">Aufgabe ziehen</button>
+        <button class="button secondary" id="draw-again" type="button" hidden>Noch einmal ziehen</button>
+        <button class="button secondary" id="copy-task" type="button" hidden>Aufgabe kopieren</button>
+      </div>
+
+      <div class="event-info compact-info before-draw">
+        <h2>So funktioniert es</h2>
+        <p>Beide Aufgaben gehören zusammen. Passt Details wie Ziel, Karte oder Feste gemeinsam an die aktuelle Spielsituation an. Ein guter Plan, klare Rollen und gemeinsames Auswerten sind wichtiger als ein perfekter Erfolg.</p>
+        <p class="note">Die Aufgaben werden aus <code>aufgaben.md</code> geladen und können dort einfach als Markdown-Listen bearbeitet werden.</p>
+      </div>
+
+      <div class="actions back-link before-draw">
+        <a class="button secondary" href="index.html">Zurück zum Event</a>
+        <a class="button secondary" href="https://discord.gg/EwYqEqCdZz" target="_blank" rel="noopener noreferrer">Zum OOPS-Discord</a>
+      </div>
+    </section>
+  </main>
+  <footer><span>[OOPS] · We Can't Fly Here</span></footer>
+</body>
+</html>

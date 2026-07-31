@@ -1,0 +1,5 @@
+Füge in index.html innerhalb des vorhandenen <div class="actions"> am besten als ersten Button ein:
+
+<a class="button primary" href="aufgaben.html">Gruppenaufgabe ziehen</a>
+
+Kopiere außerdem den Inhalt von styles-addition.css ans Ende von styles.css.

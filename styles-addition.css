@@ -1,0 +1,188 @@
+/* Ergänzung am Ende von styles.css */
+button.button {
+  cursor: pointer;
+  font: inherit;
+}
+
+button.button:disabled {
+  cursor: wait;
+  opacity: .55;
+}
+
+.task-page {
+  max-width: 920px;
+}
+
+.task-page h1 {
+  margin-bottom: 1.25rem;
+  font-size: clamp(2.7rem, 8vw, 5rem);
+}
+
+.task-page .intro {
+  margin-top: 0;
+  margin-bottom: 1.35rem;
+}
+
+.task-rules {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: .65rem;
+  margin: 0 auto 1.8rem;
+}
+
+.task-rules span {
+  padding: .5rem .85rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  background: rgba(255,255,255,.04);
+  font-size: .9rem;
+  font-weight: 750;
+}
+
+.mission-panel {
+  display: grid;
+  gap: 1rem;
+  margin: 1.25rem auto 1.5rem;
+  text-align: left;
+}
+
+.mission-card {
+  padding: clamp(1.35rem, 4vw, 2.15rem);
+  border: 1px solid rgba(238,96,116,.45);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, rgba(201,52,74,.16), rgba(255,255,255,.035));
+  box-shadow: var(--shadow);
+}
+
+.bonus-card {
+  border-color: rgba(216,155,69,.5);
+  background: linear-gradient(145deg, rgba(216,155,69,.14), rgba(255,255,255,.03));
+}
+
+.mission-label {
+  margin: 0 0 .5rem;
+  color: var(--gold);
+  font-size: .82rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.mission-category {
+  margin: 0 0 .8rem;
+  color: var(--red-light);
+  font-size: clamp(1rem, 2.3vw, 1.2rem);
+  font-weight: 850;
+}
+
+.mission-text {
+  margin: 0;
+  font-size: clamp(1.2rem, 3vw, 1.65rem);
+  line-height: 1.45;
+  font-weight: 760;
+}
+
+.mission-guidance {
+  padding: 1.2rem 1.35rem;
+  border: 1px solid var(--line);
+  border-radius: .9rem;
+  background: rgba(255,255,255,.045);
+  color: var(--muted);
+}
+
+.mission-guidance p {
+  margin: 0;
+  font-size: clamp(1rem, 2vw, 1.12rem);
+  line-height: 1.6;
+}
+
+.mission-time {
+  margin: .25rem 0 0;
+  color: var(--text);
+  font-size: clamp(1.5rem, 4vw, 2.15rem);
+  font-weight: 900;
+  text-align: center;
+}
+
+.status {
+  min-height: 1.4rem;
+  margin: 0;
+  color: var(--muted);
+  text-align: center;
+}
+
+.task-actions {
+  gap: .85rem;
+  margin: 1.25rem 0 1.8rem;
+}
+
+.task-actions .button {
+  min-width: 12rem;
+}
+
+.compact-info {
+  margin-top: 0;
+}
+
+.compact-info code {
+  color: var(--gold);
+}
+
+.back-link {
+  gap: .85rem;
+  margin: 1.25rem 0 0;
+}
+
+/* Nach dem ersten Ziehen: nur noch die eigentliche Mission. */
+.mission-drawn .before-draw {
+  display: none;
+}
+
+.mission-drawn .mission-panel {
+  gap: 1.15rem;
+  margin-top: .25rem;
+}
+
+.mission-drawn .mission-card {
+  border-width: 2px;
+}
+
+.mission-drawn .main-mission-card {
+  box-shadow: 0 22px 65px rgba(201,52,74,.23);
+}
+
+.mission-drawn .bonus-card {
+  box-shadow: 0 18px 55px rgba(216,155,69,.16);
+}
+
+.mission-drawn .task-actions {
+  margin-top: 1.5rem;
+  margin-bottom: 0;
+}
+
+.mission-drawn + footer,
+body:has(.mission-drawn) footer {
+  display: none;
+}
+
+@media (max-width: 620px) {
+  .task-page h1 {
+    margin-bottom: 1rem;
+  }
+
+  .mission-panel {
+    gap: .8rem;
+  }
+
+  .task-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .task-actions .button {
+    width: 100%;
+    min-width: 0;
+  }
+}
