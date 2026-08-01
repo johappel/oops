@@ -7,14 +7,22 @@ const statusEl = document.querySelector("#question-status");
 const drawAgainButton = document.querySelector("#draw-again");
 const chooseCategoryButton = document.querySelector("#choose-category");
 const copyLinkButton = document.querySelector("#copy-link");
+const participantWaitingEl = document.querySelector("#participant-waiting");
+const participantWaitingTextEl = document.querySelector("#participant-waiting-text");
+const rotationInstructionEl = document.querySelector("#rotation-instruction");
 
 const timerSetupEl = document.querySelector("#timer-setup");
+const timerWaitingEl = document.querySelector("#timer-waiting");
 const timerRunningEl = document.querySelector("#timer-running");
 const timerDisplayEl = document.querySelector("#timer-display");
 const timerProgressEl = document.querySelector("#timer-progress");
 const timerTrackEl = document.querySelector(".timer-track");
 const timerStopButton = document.querySelector("#timer-stop");
 const timerChoiceButtons = [...document.querySelectorAll("[data-minutes]")];
+const moderatorOnlyEls = [...document.querySelectorAll("[data-moderator-only]")];
+
+const ROLE_STORAGE_KEY = "oops-speeddating-role";
+const PARTICIPANT_VIEW = "participant";
 
 let categories = [];
 let currentCategory = null;
@@ -23,6 +31,46 @@ let currentQuestionIndex = -1;
 let timerDurationMs = 0;
 let timerEndMs = 0;
 let timerIntervalId = null;
+
+function readStoredRole() {
+  try {
+    return sessionStorage.getItem(ROLE_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+function storeRole(role) {
+  try {
+    sessionStorage.setItem(ROLE_STORAGE_KEY, role);
+  } catch {
+    // Die Seite funktioniert auch ohne Session Storage.
+  }
+}
+
+function resolveModeratorRole() {
+  const view = new URLSearchParams(location.search).get("view");
+
+  if (view === PARTICIPANT_VIEW) {
+    storeRole(PARTICIPANT_VIEW);
+    return false;
+  }
+
+  if (!location.hash) {
+    storeRole("moderator");
+    return true;
+  }
+
+  return readStoredRole() === "moderator";
+}
+
+const isModerator = resolveModeratorRole();
+document.body.classList.toggle("moderator-view", isModerator);
+document.body.classList.toggle("participant-view", !isModerator);
+
+for (const element of moderatorOnlyEls) {
+  element.hidden = !isModerator;
+}
 
 function parseQuestions(markdown) {
   const parsed = [];
@@ -70,6 +118,8 @@ function randomIndex(length, excludedIndex = -1) {
 }
 
 function renderCategories() {
+  if (!categoryButtonsEl) return;
+
   categoryButtonsEl.replaceChildren();
 
   for (const category of categories) {
@@ -91,6 +141,8 @@ function renderCategories() {
 }
 
 function showRandomQuestion(category) {
+  if (!isModerator) return;
+
   const previousIndex = currentCategory?.slug === category.slug ? currentQuestionIndex : -1;
   const index = randomIndex(category.questions.length, previousIndex);
   stopTimer({ updateHash: false });
@@ -105,8 +157,10 @@ function showQuestion(category, index, updateHash) {
 
   categoryEl.textContent = category.title;
   questionEl.textContent = category.questions[index];
+  participantWaitingEl.hidden = true;
   resultEl.hidden = false;
   questionPageEl.classList.add("question-shown");
+  rotationInstructionEl.hidden = true;
   statusEl.textContent = "";
 
   if (updateHash) {
@@ -166,26 +220,42 @@ function parseHash() {
   return true;
 }
 
+function showParticipantWaiting(message) {
+  clearTimerInterval();
+  currentCategory = null;
+  currentQuestionIndex = -1;
+  questionPageEl.classList.remove("question-shown");
+  resultEl.hidden = true;
+  participantWaitingEl.hidden = false;
+  participantWaitingTextEl.textContent = message;
+  document.title = "[OOPS] Auf die nächste Frage warten";
+}
+
 function resetToCategories() {
+  if (!isModerator) return;
+
   stopTimer({ updateHash: false });
   currentCategory = null;
   currentQuestionIndex = -1;
   questionPageEl.classList.remove("question-shown");
   resultEl.hidden = true;
+  participantWaitingEl.hidden = true;
   statusEl.textContent = "";
-  history.replaceState(null, "", `${location.pathname}${location.search}`);
+  history.replaceState(null, "", location.pathname);
   document.title = "[OOPS] Speeddating-Frage";
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function startTimer(minutes) {
+  if (!isModerator) return;
+
   timerDurationMs = minutes * 60 * 1000;
   timerEndMs = Date.now() + timerDurationMs;
   activateTimerUi();
   writeHash();
   updateTimer();
   timerIntervalId = window.setInterval(updateTimer, 250);
-  statusEl.textContent = "Der Link enthält jetzt den gemeinsamen Endzeitpunkt.";
+  statusEl.textContent = "Der Teilnehmer-Link enthält jetzt Frage und gemeinsamen Endzeitpunkt.";
 }
 
 function resumeTimer(minutes, endMs) {
@@ -202,8 +272,22 @@ function resumeTimer(minutes, endMs) {
 
 function activateTimerUi() {
   timerSetupEl.hidden = true;
+  timerWaitingEl.hidden = true;
   timerRunningEl.hidden = false;
+  rotationInstructionEl.hidden = true;
   document.body.classList.remove("timer-finished");
+}
+
+function finishTimer() {
+  clearTimerInterval();
+  timerDisplayEl.textContent = "00:00";
+  timerProgressEl.style.width = "0%";
+  timerTrackEl.setAttribute("aria-valuenow", "0");
+  document.body.classList.add("timer-finished");
+  rotationInstructionEl.hidden = false;
+  statusEl.textContent = isModerator
+    ? "Die Gesprächszeit ist abgelaufen. Gruppe 2 wechselt jetzt einen Channel nach unten."
+    : "Zeit! Wechselt jetzt wie angezeigt und wartet danach auf die nächste Frage.";
 }
 
 function updateTimer() {
@@ -219,12 +303,7 @@ function updateTimer() {
   timerTrackEl.setAttribute("aria-valuenow", String(percent));
 
   if (remainingMs <= 0) {
-    clearTimerInterval();
-    timerDisplayEl.textContent = "00:00";
-    timerProgressEl.style.width = "0%";
-    timerTrackEl.setAttribute("aria-valuenow", "0");
-    document.body.classList.add("timer-finished");
-    statusEl.textContent = "Die Gesprächszeit ist abgelaufen.";
+    finishTimer();
   }
 }
 
@@ -232,15 +311,17 @@ function stopTimer({ updateHash = true } = {}) {
   clearTimerInterval();
   timerDurationMs = 0;
   timerEndMs = 0;
-  timerSetupEl.hidden = false;
+  timerSetupEl.hidden = !isModerator;
+  timerWaitingEl.hidden = isModerator;
   timerRunningEl.hidden = true;
+  rotationInstructionEl.hidden = true;
   document.body.classList.remove("timer-finished");
   timerDisplayEl.textContent = "00:00";
   timerProgressEl.style.width = "100%";
   timerTrackEl.setAttribute("aria-valuenow", "100");
   statusEl.textContent = "";
 
-  if (updateHash && currentCategory) {
+  if (updateHash && currentCategory && isModerator) {
     writeHash();
   }
 }
@@ -252,19 +333,25 @@ function clearTimerInterval() {
   }
 }
 
-async function copyQuestionLink() {
-  if (!currentCategory || currentQuestionIndex < 0) return;
-
+function buildParticipantUrl() {
   writeHash();
   const url = new URL(location.href);
+  url.searchParams.set("view", PARTICIPANT_VIEW);
+  return url;
+}
+
+async function copyQuestionLink() {
+  if (!isModerator || !currentCategory || currentQuestionIndex < 0) return;
+
+  const url = buildParticipantUrl();
 
   try {
     await navigator.clipboard.writeText(url.toString());
     statusEl.textContent = timerEndMs > 0
-      ? "Der Link zur Frage und zum gemeinsamen Timer wurde kopiert."
-      : "Der Link zu genau dieser Frage wurde kopiert.";
+      ? "Teilnehmer-Link mit Frage und laufendem Timer kopiert. Jetzt im Hauptchannel einfügen."
+      : "Teilnehmer-Link zur Frage kopiert. Für einen gemeinsamen Countdown zuerst den Timer starten.";
   } catch {
-    statusEl.textContent = `Link: ${url.toString()}`;
+    statusEl.textContent = `Teilnehmer-Link: ${url.toString()}`;
   }
 }
 
@@ -278,26 +365,50 @@ async function loadQuestions() {
       throw new Error("Keine Fragen gefunden");
     }
 
-    renderCategories();
+    if (isModerator) {
+      renderCategories();
+    }
 
-    if (location.hash && !parseHash()) {
-      statusEl.textContent = "Der verlinkte Frage-Code wurde nicht gefunden. Bitte wählt eine Kategorie.";
-      history.replaceState(null, "", `${location.pathname}${location.search}`);
+    if (location.hash) {
+      if (!parseHash()) {
+        if (isModerator) {
+          statusEl.textContent = "Der verlinkte Frage-Code wurde nicht gefunden. Bitte wähle eine Kategorie.";
+          history.replaceState(null, "", location.pathname);
+        } else {
+          showParticipantWaiting("Der Link ist ungültig oder unvollständig. Wartet auf einen neuen Link der Moderation.");
+        }
+      }
+    } else if (!isModerator) {
+      showParticipantWaiting("Die Moderation veröffentlicht den Link zur gemeinsamen Frage im Discord-Hauptchannel.");
     }
   } catch (error) {
     console.error(error);
-    categoryButtonsEl.innerHTML =
-      '<p class="status">Die Fragen konnten nicht geladen werden. Bitte informiert die Eventleitung.</p>';
+    if (isModerator && categoryButtonsEl) {
+      categoryButtonsEl.innerHTML =
+        '<p class="status">Die Fragen konnten nicht geladen werden. Bitte prüfe fragen.md.</p>';
+    } else {
+      showParticipantWaiting("Die Fragen konnten gerade nicht geladen werden. Bitte informiert die Eventleitung.");
+    }
   }
 }
 
-drawAgainButton.addEventListener("click", () => {
-  if (currentCategory) showRandomQuestion(currentCategory);
-});
+if (drawAgainButton) {
+  drawAgainButton.addEventListener("click", () => {
+    if (currentCategory) showRandomQuestion(currentCategory);
+  });
+}
 
-chooseCategoryButton.addEventListener("click", resetToCategories);
-copyLinkButton.addEventListener("click", copyQuestionLink);
-timerStopButton.addEventListener("click", () => stopTimer());
+if (chooseCategoryButton) {
+  chooseCategoryButton.addEventListener("click", resetToCategories);
+}
+
+if (copyLinkButton) {
+  copyLinkButton.addEventListener("click", copyQuestionLink);
+}
+
+if (timerStopButton) {
+  timerStopButton.addEventListener("click", () => stopTimer());
+}
 
 for (const button of timerChoiceButtons) {
   button.addEventListener("click", () => {
@@ -306,7 +417,11 @@ for (const button of timerChoiceButtons) {
   });
 }
 
-window.addEventListener("hashchange", parseHash);
+window.addEventListener("hashchange", () => {
+  if (!parseHash() && !isModerator) {
+    showParticipantWaiting("Wartet auf den nächsten gültigen Fragen-Link der Moderation.");
+  }
+});
 window.addEventListener("beforeunload", clearTimerInterval);
 
 loadQuestions();
