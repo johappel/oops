@@ -151,11 +151,16 @@ function drawAdjacent(direction) {
 }
 
 function resetSelection() {
+  if (currentMission) {
+    const currentDifficultyOption = document.querySelector(`input[name="difficulty"][value="${currentMission.difficulty}"]`);
+    if (currentDifficultyOption) currentDifficultyOption.checked = true;
+  }
+
   taskPageEl.classList.remove("mission-drawn");
   currentMission = null;
   categoryEl.textContent = "Noch nicht gezogen";
   mainTaskEl.textContent = "Wählt einen Schwierigkeitsgrad und zieht eure Aufgabe.";
-  bonusCardEl.hidden = false;
+  bonusCardEl.hidden = !includeBonusEl.checked;
   bonusTaskEl.textContent = "Sie wird gemeinsam mit der Hauptaufgabe gezogen.";
   difficultyBadgeEl.hidden = true;
   guidanceEl.hidden = true;
@@ -210,4 +215,7 @@ drawEasierButton.addEventListener("click", () => drawAdjacent(-1));
 drawHarderButton.addEventListener("click", () => drawAdjacent(1));
 copyButton.addEventListener("click", copyMission);
 changeSelectionButton.addEventListener("click", resetSelection);
+includeBonusEl.addEventListener("change", () => {
+  if (!currentMission) bonusCardEl.hidden = !includeBonusEl.checked;
+});
 loadTasks();
