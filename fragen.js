@@ -211,7 +211,7 @@ function parseHash() {
   const durationMinutes = Number.parseInt(params.get("duration"), 10);
   const endMs = Number.parseInt(params.get("end"), 10);
 
-  if ([2, 3, 5].includes(durationMinutes) && Number.isFinite(endMs) && endMs > 0) {
+  if ([1, 2, 3, 5].includes(durationMinutes) && Number.isFinite(endMs) && endMs > 0) {
     resumeTimer(durationMinutes, endMs);
   } else {
     stopTimer({ updateHash: false });
@@ -413,7 +413,7 @@ if (timerStopButton) {
 for (const button of timerChoiceButtons) {
   button.addEventListener("click", () => {
     const minutes = Number.parseInt(button.dataset.minutes, 10);
-    if ([2, 3, 5].includes(minutes)) startTimer(minutes);
+    if ([1, 2, 3, 5].includes(minutes)) startTimer(minutes);
   });
 }
 
