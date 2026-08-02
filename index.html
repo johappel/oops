@@ -11,9 +11,17 @@
   <meta property="og:image" content="assets/speeddating.webp">
   <title>[OOPS] Member Speeddating – Samstag, 17:00 Uhr</title>
   <link rel="preload" href="assets/speeddating.webp" as="image" type="image/webp">
+  <link rel="preload" href="OOPS-Dating-Raid.mp3" as="audio" type="audio/mpeg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <audio id="background-music" src="OOPS-Dating-Raid.mp3" autoplay loop preload="auto" playsinline aria-hidden="true"></audio>
+
+  <button class="sound-toggle" id="sound-toggle" type="button" aria-label="Hintergrundmusik stummschalten" aria-pressed="false" title="Hintergrundmusik stummschalten">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Mute_Icon.svg" width="24" height="24" alt="">
+    <span class="sound-toggle-label">Ton aus</span>
+  </button>
+
   <main>
     <section class="hero" aria-labelledby="event-title">
       <div class="eyebrow">Guild Wars 2 · WvW · Kennenlern-Event</div>
@@ -41,5 +49,69 @@
   <footer>
     <span>[OOPS] · We Can't Fly Here</span>
   </footer>
+
+  <script>
+    const backgroundMusic = document.getElementById('background-music');
+    const soundToggle = document.getElementById('sound-toggle');
+    const soundToggleLabel = soundToggle.querySelector('.sound-toggle-label');
+
+    backgroundMusic.volume = 0.4;
+
+    function updateSoundToggle() {
+      const isMuted = backgroundMusic.muted;
+      const actionText = isMuted ? 'Ton an' : 'Ton aus';
+      const accessibleText = isMuted
+        ? 'Hintergrundmusik einschalten'
+        : 'Hintergrundmusik stummschalten';
+
+      soundToggle.classList.toggle('is-muted', isMuted);
+      soundToggle.setAttribute('aria-pressed', String(isMuted));
+      soundToggle.setAttribute('aria-label', accessibleText);
+      soundToggle.title = accessibleText;
+      soundToggleLabel.textContent = actionText;
+    }
+
+    async function startBackgroundMusic() {
+      try {
+        await backgroundMusic.play();
+        soundToggle.classList.remove('needs-start');
+        updateSoundToggle();
+        return true;
+      } catch (error) {
+        soundToggle.classList.add('needs-start');
+        soundToggle.setAttribute('aria-label', 'Hintergrundmusik starten');
+        soundToggle.title = 'Hintergrundmusik starten';
+        soundToggleLabel.textContent = 'Musik an';
+        return false;
+      }
+    }
+
+    soundToggle.addEventListener('click', async () => {
+      if (backgroundMusic.paused) {
+        backgroundMusic.muted = false;
+        await startBackgroundMusic();
+        return;
+      }
+
+      backgroundMusic.muted = !backgroundMusic.muted;
+      updateSoundToggle();
+    });
+
+    async function startAfterInteraction(event) {
+      if (event.target instanceof Element && event.target.closest('#sound-toggle')) {
+        return;
+      }
+
+      const started = await startBackgroundMusic();
+      if (started) {
+        document.removeEventListener('click', startAfterInteraction);
+        document.removeEventListener('keydown', startAfterInteraction);
+      }
+    }
+
+    document.addEventListener('click', startAfterInteraction);
+    document.addEventListener('keydown', startAfterInteraction);
+    startBackgroundMusic();
+  </script>
 </body>
 </html>
