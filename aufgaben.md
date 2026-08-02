@@ -4,10 +4,10 @@ Die Aufgaben sollen in etwa 10–20 Minuten machbar sein, keinen Kommandeur ben�
 
 ## Versorgung und Logistik
 
-- Den Weg für Dolyaks zu einer eigenen Feste freiräumen und dabei Wachen, Türme und Gegner im Blick behalten.
-- Drei gegnerische Vorratslieferungen unterbrechen: Dolyaks ausschalten oder zugehörige Lager drehen.
-- Ein eigenes Lager bis zu 15 Minuten halten und die von dort startenden Dolyaks schützen.
-- Gemeinsam 200 Vorräte zu einem in der Gruppe vereinbarten "wertvollen" Ziel bringen und in dortige Belagerungswaffen investieren. (Leicht)
+- Den Weg für Dolyaks zu einer eigenen Feste freiräumen und dabei Wachen, Türme und Gegner im Blick behalten. (M)
+- Drei gegnerische Vorratslieferungen unterbrechen: Dolyaks ausschalten oder zugehörige Lager drehen. (M)
+- Ein eigenes Lager bis zu 15 Minuten halten und die von dort startenden Dolyaks schützen. (M)
+- Gemeinsam 200 Vorräte zu einem in der Gruppe vereinbarten "wertvollen" Ziel bringen und in dortige Belagerungswaffen investieren. (L)
 
 ## Eroberung
 
@@ -23,14 +23,15 @@ Die Aufgaben sollen in etwa 10–20 Minuten machbar sein, keinen Kommandeur ben�
 ## Verteidigung
 
 - Eine eigene Feste mindestens zehn Minuten absichern: Belagerungswaffen prüfen, Fallen legen und wichtige Zugänge beobachten. (M)
-- Einen gegnerischen Angriff auf ein Objekt (z.B. Lager, Turm, Feste) melden und bis zum Eintreffen von Hilfe verzögern. (S)
-- Eine beschädigte Mauer oder ein Tor mit Vorräten möglichst vollständig reparieren.
+- Einen gegnerischen Angriff auf ein Objekt (z. B. Lager, Turm oder Feste) melden und bis zum Eintreffen von Hilfe verzögern. (S)
+- Eine beschädigte Mauer oder ein Tor mit Vorräten möglichst vollständig reparieren. (L)
 - Gegnerische Späher oder eine Kleingruppe von einer eigenen Versorgungslinie vertreiben. (S)
 
 ## Kampf
 
 - Gemeinsam mindestens drei Gegner besiegen. (S)
-- Einen Kampf gegen mehrere (S) oder einen (L) Gegner gewinnen, ohne dass ein Gruppenmitglied vollständig stirbt.
+- Einen Kampf gegen einen Gegner gewinnen, ohne dass ein Gruppenmitglied vollständig stirbt. (L)
+- Einen Kampf gegen mehrere Gegner gewinnen, ohne dass ein Gruppenmitglied vollständig stirbt. (S)
 - Eine gegnerische Kleingruppe aus einem Lager vertreiben. (M)
 - Drei Spieler derselben gegnerischen Welt besiegen. (S)
 - Einen Kampf mit klaren Ansagen und gemeinsamem Fokus führen. (M)
